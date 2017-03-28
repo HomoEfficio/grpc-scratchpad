@@ -6,23 +6,28 @@ apply plugin: 'com.google.protobuf'
 
 sourceCompatibility = 1.8
 
+repositories {
+    mavenCentral()
+}
+
 buildscript {
+
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.1'
     }
 }
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.0.2"
+        artifact = "com.google.protobuf:protoc:3.2.0"
     }
     plugins {
         grpc {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.2.0"
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.2.0'
         }
     }
     generateProtoTasks {
