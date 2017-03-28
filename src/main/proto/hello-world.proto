@@ -1,0 +1,22 @@
+syntax = "profo3";
+
+option java_multiple_files = true;
+option java_package = "homo.efficio.grpc.scratchpad.hellogrpc";
+option java_outer_classname = "HelloGrpcProto";
+
+package hellogrpc;
+
+service HelloGrpc {
+
+    rpc SayHello(HelloRequest) returns (HelloReply) {}
+}
+
+message HelloRequest {
+
+    string name = 1;
+}
+
+message HelloReponse {
+
+    string welcomeMessage = 1;
+}
