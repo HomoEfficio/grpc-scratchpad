@@ -1,4 +1,4 @@
-syntax = "profo3";
+syntax = "proto3";
 
 option java_multiple_files = true;
 option java_package = "homo.efficio.grpc.scratchpad.hellogrpc";
@@ -8,7 +8,7 @@ package hellogrpc;
 
 service HelloGrpc {
 
-    rpc SayHello(HelloRequest) returns (HelloReply) {}
+    rpc SayHello(HelloRequest) returns (HelloReponse) {}
 }
 
 message HelloRequest {
