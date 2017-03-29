@@ -1,6 +1,6 @@
 package homo.efficio.grpc.scratchpad.hellogrpc.server;
 
-import homo.efficio.grpc.scratchpad.hellogrpc.service.HelloGrpcImpl;
+import homo.efficio.grpc.scratchpad.hellogrpc.server.service.HelloGrpcServerImpl;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
@@ -11,16 +11,16 @@ import java.util.logging.Logger;
  * @author homo.efficio@gmail.com
  *         created on 2017. 3. 28.
  */
-public class HelloGrpcServer {
+public class HelloGrpcServerRunner {
 
-    private static final Logger logger = Logger.getLogger(HelloGrpcServer.class.getName());
+    private static final Logger logger = Logger.getLogger(HelloGrpcServerRunner.class.getName());
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
         final int port = 54321;
 
         Server server = ServerBuilder.forPort(port)
-                .addService(new HelloGrpcImpl())
+                .addService(new HelloGrpcServerImpl())
                 .build()
                 .start();
 
