@@ -8,7 +8,7 @@ option java_outer_classname = "HelloGrpcProto";
 
 service HelloGrpc {
 
-    rpc SayHello(HelloRequest) returns (HelloReponse) {}
+    rpc SayHello(HelloRequest) returns (HelloResponse) {}
 }
 
 message HelloRequest {
@@ -16,7 +16,7 @@ message HelloRequest {
     string name = 1;
 }
 
-message HelloReponse {
+message HelloResponse {
 
     string welcomeMessage = 1;
 }
