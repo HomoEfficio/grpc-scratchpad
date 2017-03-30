@@ -12,8 +12,6 @@ import java.util.logging.Logger;
  */
 public class HelloGrpcServerRunner {
 
-    private static final Logger logger = Logger.getLogger(HelloGrpcServerRunner.class.getName());
-
     public static void main(String[] args) throws IOException, InterruptedException {
 
         final int port = 54321;
