@@ -1,4 +1,4 @@
-package homo.efficio.grpc.scratchpad.hellogrpc.server.service;
+package homo.efficio.grpc.scratchpad.hellogrpc.server;
 
 import homo.efficio.grpc.scratchpad.hellogrpc.HelloGrpcGrpc;
 import homo.efficio.grpc.scratchpad.hellogrpc.HelloRequest;
@@ -11,9 +11,9 @@ import java.util.logging.Logger;
  * @author homo.efficio@gmail.com
  *         created on 2017. 3. 28.
  */
-public class HelloGrpcServerImpl extends HelloGrpcGrpc.HelloGrpcImplBase {
+public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
 
-    private final Logger logger = Logger.getLogger(HelloGrpcServerImpl.class.getName());
+    private final Logger logger = Logger.getLogger(HelloGrpcServerService.class.getName());
 
     @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
