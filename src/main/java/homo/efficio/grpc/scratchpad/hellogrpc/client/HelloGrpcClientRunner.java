@@ -18,8 +18,6 @@ import java.util.logging.Logger;
  */
 public class HelloGrpcClientRunner {
 
-    private final Logger logger = Logger.getLogger(HelloGrpcClientRunner.class.getName());
-
     public static void main(String[] args) throws InterruptedException {
         String host = "localhost";
         int serverPort = 54321;

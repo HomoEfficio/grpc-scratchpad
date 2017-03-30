@@ -24,15 +24,15 @@ public class HelloGrpcClient {
     }
 
     public void sendMessage(String msg) {
-        logger.info("Will try to greet " + msg + " ...");
+        logger.info("Request 생성, 메시지: [" + msg + "]");
         HelloRequest request = HelloRequest.newBuilder().setName(msg).build();
         HelloResponse response;
         try {
             response = blockingStub.sayHello(request);
         } catch (StatusRuntimeException e) {
-            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            logger.warning("RPC 서버 호출 중 실패: " + e.getStatus());
             return;
         }
-        logger.info("Greeting: " + response.getWelcomeMessage());
+        logger.info("서버로부터의 응답: " + response.getWelcomeMessage());
     }
 }
