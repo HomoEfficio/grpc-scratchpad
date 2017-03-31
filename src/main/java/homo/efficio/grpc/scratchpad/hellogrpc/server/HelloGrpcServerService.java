@@ -5,6 +5,7 @@ import homo.efficio.grpc.scratchpad.hellogrpc.HelloRequest;
 import homo.efficio.grpc.scratchpad.hellogrpc.HelloResponse;
 import io.grpc.stub.StreamObserver;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -36,5 +37,29 @@ public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
         responseObserver.onNext(helloResponse);
         responseObserver.onNext(helloResponse);
         responseObserver.onCompleted();
+    }
+
+    @Override
+    public StreamObserver<HelloRequest> clientStreamingSayHello(StreamObserver<HelloResponse> responseObserver) {
+//        return super.clientStreamingSayHello(responseObserver);
+        return new StreamObserver<HelloRequest>() {
+            StringBuilder sb = new StringBuilder();
+            @Override
+            public void onNext(HelloRequest value) {
+                sb.append(value.getName())
+                        .append("\n============================\n");
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                logger.log(Level.SEVERE, "ClientStreaming gRPC 에러 발생");
+            }
+
+            @Override
+            public void onCompleted() {
+                responseObserver.onNext(HelloResponse.newBuilder().setWelcomeMessage(sb.toString()).build());
+                responseObserver.onCompleted();
+            }
+        };
     }
 }

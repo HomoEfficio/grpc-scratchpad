@@ -8,6 +8,7 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.AbstractStub;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,11 +24,25 @@ public class HelloGrpcClientRunner {
         int serverPort = 54321;
 
         HelloGrpcClientInfra helloGrpcClientInfra = new HelloGrpcClientInfra(host, serverPort);
-        HelloGrpcGrpc.HelloGrpcBlockingStub stub = helloGrpcClientInfra.getStub();
-        HelloGrpcClient helloGrpcClient = new HelloGrpcClient(stub);
 
-        helloGrpcClient.sendMessage("스프링캠프 2017");
+//        unary, serverStreaming
+//        HelloGrpcGrpc.HelloGrpcBlockingStub stub = helloGrpcClientInfra.getBlockingStub();
+//        HelloGrpcClient helloGrpcClient = new HelloGrpcClient(stub);
+//        helloGrpcClient.sendMessage("스프링캠프 2017");
 
+
+//        clientStreaming
+        HelloGrpcGrpc.HelloGrpcStub asyncStub = helloGrpcClientInfra.getAsyncStub();
+        HelloGrpcClient helloGrpcClient = new HelloGrpcClient(asyncStub);
+
+        String[] strings = {"스프링", "캠프", "2017"};
+        helloGrpcClient.sendMessage(Arrays.asList(strings));
+
+//        unary, serverStreaming
+//        helloGrpcClientInfra.shutdown();
+
+        // clientStreaming은 async 이므로 여유를 주고 shutdown 해야 된다
+        Thread.sleep(2000);
         helloGrpcClientInfra.shutdown();
     }
 }

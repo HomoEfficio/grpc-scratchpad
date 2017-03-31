@@ -19,6 +19,7 @@ public class HelloGrpcClientInfra {
 
     private final ManagedChannel channel;
     private final HelloGrpcGrpc.HelloGrpcBlockingStub blockingStub;
+    private final HelloGrpcGrpc.HelloGrpcStub asyncStub;
 
     public HelloGrpcClientInfra(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port)
@@ -28,6 +29,7 @@ public class HelloGrpcClientInfra {
     public HelloGrpcClientInfra(ManagedChannelBuilder<?> channelBuilder) {
         this.channel = channelBuilder.build();
         this.blockingStub = HelloGrpcGrpc.newBlockingStub(channel);
+        this.asyncStub = HelloGrpcGrpc.newStub(channel);
 
     }
 
@@ -36,7 +38,11 @@ public class HelloGrpcClientInfra {
         channel.shutdown().awaitTermination(2, TimeUnit.SECONDS);
     }
 
-    public HelloGrpcGrpc.HelloGrpcBlockingStub getStub() {
+    public HelloGrpcGrpc.HelloGrpcBlockingStub getBlockingStub() {
         return blockingStub;
+    }
+
+    public HelloGrpcGrpc.HelloGrpcStub getAsyncStub() {
+        return asyncStub;
     }
 }
