@@ -8,7 +8,10 @@ option java_outer_classname = "HelloGrpcProto";
 
 service HelloGrpc {
 
-    rpc SayHello(HelloRequest) returns (HelloResponse) {}
+    rpc UnarySayHello(HelloRequest) returns (HelloResponse) {}
+
+    rpc serverStreamingSayHello(HelloRequest) returns (stream HelloResponse) {}
+
 }
 
 message HelloRequest {

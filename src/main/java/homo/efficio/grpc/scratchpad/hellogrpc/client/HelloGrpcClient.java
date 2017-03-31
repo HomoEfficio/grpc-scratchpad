@@ -6,6 +6,7 @@ import homo.efficio.grpc.scratchpad.hellogrpc.HelloResponse;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.AbstractStub;
 
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,13 +27,19 @@ public class HelloGrpcClient {
     public void sendMessage(String msg) {
         logger.info("Request 생성, 메시지: [" + msg + "]");
         HelloRequest request = HelloRequest.newBuilder().setName(msg).build();
-        HelloResponse response;
+//        HelloResponse response;
+        Iterator<HelloResponse> helloResponseIterator = null;
         try {
-            response = blockingStub.sayHello(request);
+//            response = blockingStub.unarySayHello(request);
+            helloResponseIterator = blockingStub.serverStreamingSayHello(request);
+
         } catch (StatusRuntimeException e) {
             logger.warning("RPC 서버 호출 중 실패: " + e.getStatus());
             return;
         }
-        logger.info("서버로부터의 응답: " + response.getWelcomeMessage());
+//        logger.info("서버로부터의 응답: " + response.getWelcomeMessage());
+        helloResponseIterator.forEachRemaining(
+                (e) -> logger.info("서버로부터의 Streaming 응답: " + e.getWelcomeMessage())
+        );
     }
 }
