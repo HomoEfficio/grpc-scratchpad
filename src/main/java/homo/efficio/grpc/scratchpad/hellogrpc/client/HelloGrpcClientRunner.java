@@ -21,21 +21,21 @@ public class HelloGrpcClientRunner {
         HelloGrpcClient helloGrpcClient = new HelloGrpcClient(blockingStub, asyncStub, futureStub);
 
 //        // Unary
-//        helloGrpcClient.sendUnaryMessage("Unary gPRC 스프링캠프 2017");
+//        helloGrpcClient.sendUnaryMessage("Unary gRPC 스프링캠프 2017");
 //        helloGrpcClientInfra.shutdown();
 
 //        // ServerStreaming
-//        helloGrpcClient.sendServerStreamingMessage("ServerStreaming gRPC 스프링캠프 2017");
+//        helloGrpcClient.sendServerStreamingMessage("Server Streaming gRPC 스프링캠프 2017");
 //        helloGrpcClientInfra.shutdown();
 
 //        // clientStreaming
-//        helloGrpcClient.sendClientStreamingMessage(Arrays.asList("ClientStreaming", "gRPC", "스프링캠프 2017"));
+//        helloGrpcClient.sendClientStreamingMessage(Arrays.asList("Client Streaming", "gRPC", "스프링캠프 2017"));
 //        // clientStreaming은 async 이므로 여유를 주고 shutdown 해야 된다
 //        Thread.sleep(2000);
 //        helloGrpcClientInfra.shutdown();
 
         // biStreaming
-        helloGrpcClient.sendBiStreamingMessage(Arrays.asList("ClientStreaming", "gRPC", "스프링캠프 2017"));
+        helloGrpcClient.sendBiStreamingMessage(Arrays.asList("Bi Streaming", "gRPC", "스프링캠프 2017"));
         // biStreaming은 async 이므로 여유를 주고 shutdown 해야 된다
         Thread.sleep(2000);
         helloGrpcClientInfra.shutdown();

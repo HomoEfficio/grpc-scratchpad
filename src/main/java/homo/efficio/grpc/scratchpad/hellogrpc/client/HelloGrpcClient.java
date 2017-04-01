@@ -46,11 +46,11 @@ public class HelloGrpcClient {
             // unary SayHello는 클라이언트에서는 여러번 호출 가능
             response = blockingStub.unarySayHello(request);
         } catch (StatusRuntimeException e) {
-            logger.log(Level.SEVERE, "RPC 서버 호출 중 실패: " + e.getStatus());
+            logger.log(Level.SEVERE, "Unary 서비스 호출 중 실패: " + e.getStatus());
             return;
         }
 
-        logger.info("서버로부터의 응답: " + response.getWelcomeMessage());
+        logger.info("Unary 서버로부터의 응답: " + response.getWelcomeMessage());
     }
 
     public void sendServerStreamingMessage(String msg) {
@@ -59,15 +59,15 @@ public class HelloGrpcClient {
         Iterator<HelloResponse> responseIterator = null;
 
         try {
-            logger.info("ServerStreaming 서비스 호출, 메시지: [" + msg + "]");
+            logger.info("Server Streaming 서비스 호출, 메시지: [" + msg + "]");
             responseIterator = blockingStub.serverStreamingSayHello(request);
         } catch (StatusRuntimeException e) {
-            logger.log(Level.SEVERE, "ServerStreaming 서버 호출 중 실패: " + e.getStatus());
+            logger.log(Level.SEVERE, "Server Streaming 서비스 호출 중 실패: " + e.getStatus());
             return;
         }
 
         responseIterator.forEachRemaining(
-                (e) -> logger.info("서버로부터의 Streaming 응답: " + e.getWelcomeMessage())
+                (e) -> logger.info("Server Streaming 서버로부터의 Streaming 응답: " + e.getWelcomeMessage())
         );
     }
 
@@ -77,17 +77,17 @@ public class HelloGrpcClient {
         StreamObserver<HelloResponse> responseObserver = new StreamObserver<HelloResponse>() {
             @Override
             public void onNext(HelloResponse value) {
-                logger.info("서버로부터의 응답\n" + value.getWelcomeMessage());
+                logger.info("Client Streaming 서버로부터의 응답\n" + value.getWelcomeMessage());
             }
 
             @Override
             public void onError(Throwable t) {
-                logger.log(Level.SEVERE, "Clent Streaming gRPC responseObserver.onError() 호출됨");
+                logger.log(Level.SEVERE, "Clent Streaming responseObserver.onError() 호출됨");
             }
 
             @Override
             public void onCompleted() {
-                logger.info("서버 응답 completed");
+                logger.info("Client Streaming 서버 응답 completed");
             }
         };
 
@@ -112,17 +112,17 @@ public class HelloGrpcClient {
         StreamObserver<HelloResponse> responseObserver = new StreamObserver<HelloResponse>() {
             @Override
             public void onNext(HelloResponse value) {
-                logger.info("서버로부터의 응답\n" + value.getWelcomeMessage());
+                logger.info("Bi Streaming 서버로부터의 응답\n" + value.getWelcomeMessage());
             }
 
             @Override
             public void onError(Throwable t) {
-                logger.log(Level.SEVERE, "Bi Streaming gRPC responseObserver.onError() 호출됨");
+                logger.log(Level.SEVERE, "Bi Streaming responseObserver.onError() 호출됨");
             }
 
             @Override
             public void onCompleted() {
-                logger.info("서버 응답 completed");
+                logger.info("Bi Streaming 서버 응답 completed");
             }
         };
 
