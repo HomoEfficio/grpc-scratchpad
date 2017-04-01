@@ -103,4 +103,39 @@ public class HelloGrpcClient {
 
         requestObserver.onCompleted();
     }
+
+    public void sendBiStreamingMessage(List<String> messages) {
+
+        int countForOrder = 1;
+
+        // 서버에 보낼 콜백 객체
+        StreamObserver<HelloResponse> responseObserver = new StreamObserver<HelloResponse>() {
+            @Override
+            public void onNext(HelloResponse value) {
+                logger.info("서버로부터의 응답\n" + value.getWelcomeMessage());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                logger.log(Level.SEVERE, "Bi Streaming gRPC responseObserver.onError() 호출됨");
+            }
+
+            @Override
+            public void onCompleted() {
+                logger.info("서버 응답 completed");
+            }
+        };
+
+        StreamObserver<HelloRequest> requestObserver = asyncStub.biStreamingSayHello(responseObserver);
+        try {
+            for (String msg: messages) {
+                requestObserver.onNext(HelloRequest.newBuilder().setName(msg + "-" + countForOrder++).build());
+            }
+        } catch (Exception e) {
+            requestObserver.onError(e);
+            throw e;
+        }
+
+        requestObserver.onCompleted();
+    }
 }

@@ -71,9 +71,36 @@ public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
             @Override
             public void onCompleted() {
                 responseObserver.onNext(HelloResponse.newBuilder().setWelcomeMessage(sb.toString()).build());
-                // server는 Streaming이 아니므로 responseObserver를 2회 이상 호출할 수 없음.
+                // server는 Streaming이 아니므로 responseObserver.onNext()를 2회 이상 호출할 수 없음.
                 // 2회 이상 호출하면 responseObserver.onError() 호출됨
 //                responseObserver.onNext(HelloResponse.newBuilder().setWelcomeMessage(sb.toString()).build());
+                responseObserver.onCompleted();
+            }
+        };
+    }
+
+    @Override
+    public StreamObserver<HelloRequest> biStreamingSayHello(StreamObserver<HelloResponse> responseObserver) {
+//        return super.biStreamingSayHello(responseObserver);
+        return new StreamObserver<HelloRequest>() {
+            StringBuilder sb = new StringBuilder();
+
+            @Override
+            public void onNext(HelloRequest value) {
+                sb.append(value.getName())
+                        .append("\n============================\n");
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                logger.log(Level.SEVERE, "Bi Streaming requestObserver.onError() 호출");
+            }
+
+            @Override
+            public void onCompleted() {
+                responseObserver.onNext(HelloResponse.newBuilder().setWelcomeMessage(sb.toString()).build());
+                // Bi Streaming 이므로 responseObserver.onNext()를 2회 이상 호출할 수 있음.
+                responseObserver.onNext(HelloResponse.newBuilder().setWelcomeMessage(sb.toString()).build());
                 responseObserver.onCompleted();
             }
         };
