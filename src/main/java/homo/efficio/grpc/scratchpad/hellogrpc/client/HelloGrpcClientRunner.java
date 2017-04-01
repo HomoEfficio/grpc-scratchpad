@@ -26,17 +26,17 @@ public class HelloGrpcClientRunner {
         HelloGrpcClientInfra helloGrpcClientInfra = new HelloGrpcClientInfra(host, serverPort);
 
 //        unary, serverStreaming
-//        HelloGrpcGrpc.HelloGrpcBlockingStub stub = helloGrpcClientInfra.getBlockingStub();
-//        HelloGrpcClient helloGrpcClient = new HelloGrpcClient(stub);
-//        helloGrpcClient.sendMessage("스프링캠프 2017");
+        HelloGrpcGrpc.HelloGrpcBlockingStub stub = helloGrpcClientInfra.getBlockingStub();
+        HelloGrpcClient helloGrpcClient = new HelloGrpcClient(stub);
+        helloGrpcClient.sendMessage("스프링캠프 2017");
 
 
 //        clientStreaming
-        HelloGrpcGrpc.HelloGrpcStub asyncStub = helloGrpcClientInfra.getAsyncStub();
-        HelloGrpcClient helloGrpcClient = new HelloGrpcClient(asyncStub);
-
-        String[] strings = {"스프링", "캠프", "2017"};
-        helloGrpcClient.sendMessage(Arrays.asList(strings));
+//        HelloGrpcGrpc.HelloGrpcStub asyncStub = helloGrpcClientInfra.getAsyncStub();
+//        HelloGrpcClient helloGrpcClient = new HelloGrpcClient(asyncStub);
+//
+//        String[] strings = {"스프링", "캠프", "2017"};
+//        helloGrpcClient.sendMessage(Arrays.asList(strings));
 
 //        unary, serverStreaming
 //        helloGrpcClientInfra.shutdown();

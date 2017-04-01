@@ -24,6 +24,19 @@ public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
                 HelloResponse.newBuilder().setWelcomeMessage("Hello " + request.getName()).build();
         // unary이면 onNext()를 두 번 이상 호출할 수 없다.
         responseObserver.onNext(helloResponse);
+        responseObserver.onNext(helloResponse);
+        // 두 번 호출 시 클라이언트의 blockingStub.unarySayHello() 호출부에서 아래와 같은 예외 발생
+//        Status{code=CANCELLED, description=Failed to read message., cause=io.grpc.StatusRuntimeException: INTERNAL: More than one value received for unary call
+//            at io.grpc.Status.asRuntimeException(Status.java:531)
+//            at io.grpc.stub.ClientCalls$UnaryStreamToFuture.onMessage(ClientCalls.java:423)
+//            at io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1MessageRead.runInContext(ClientCallImpl.java:491)
+//            at io.grpc.internal.ContextRunnable.run(ContextRunnable.java:52)
+//            at io.grpc.internal.SerializingExecutor$TaskRunner.run(SerializingExecutor.java:152)
+//            at io.grpc.stub.ClientCalls$ThreadlessExecutor.waitAndDrain(ClientCalls.java:587)
+//            at io.grpc.stub.ClientCalls.blockingUnaryCall(ClientCalls.java:135)
+//            at homo.efficio.grpc.scratchpad.hellogrpc.HelloGrpcGrpc$HelloGrpcBlockingStub.unarySayHello(HelloGrpcGrpc.java:197)
+//            at homo.efficio.grpc.scratchpad.hellogrpc.client.HelloGrpcClient.sendMessage(HelloGrpcClient.java:49)
+//            at homo.efficio.grpc.scratchpad.hellogrpc.client.HelloGrpcClientRunner.main(HelloGrpcClientRunner.java:31)
         responseObserver.onCompleted();
     }
 
@@ -60,7 +73,7 @@ public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
                 responseObserver.onNext(HelloResponse.newBuilder().setWelcomeMessage(sb.toString()).build());
                 // server는 Streaming이 아니므로 responseObserver를 2회 이상 호출할 수 없음.
                 // 2회 이상 호출하면 responseObserver.onError() 호출됨
-                responseObserver.onNext(HelloResponse.newBuilder().setWelcomeMessage(sb.toString()).build());
+//                responseObserver.onNext(HelloResponse.newBuilder().setWelcomeMessage(sb.toString()).build());
                 responseObserver.onCompleted();
             }
         };

@@ -40,28 +40,28 @@ public class HelloGrpcClient {
         HelloRequest request = HelloRequest.newBuilder().setName(msg).build();
 
 //        unary
-//        HelloResponse response;
+        HelloResponse response;
 
 //        serverStreaming
-        Iterator<HelloResponse> helloResponseIterator = null;
+//        Iterator<HelloResponse> helloResponseIterator = null;
         try {
 //            unary
-//            response = blockingStub.unarySayHello(request);
+            response = blockingStub.unarySayHello(request);
 
 //            serverStreaming
-            helloResponseIterator = blockingStub.serverStreamingSayHello(request);
+//            helloResponseIterator = blockingStub.serverStreamingSayHello(request);
 
         } catch (StatusRuntimeException e) {
             logger.warning("RPC 서버 호출 중 실패: " + e.getStatus());
             return;
         }
 //        unary
-//        logger.info("서버로부터의 응답: " + response.getWelcomeMessage());
+        logger.info("서버로부터의 응답: " + response.getWelcomeMessage());
 
 //        server Streaming
-        helloResponseIterator.forEachRemaining(
-                (e) -> logger.info("서버로부터의 Streaming 응답: " + e.getWelcomeMessage())
-        );
+//        helloResponseIterator.forEachRemaining(
+//                (e) -> logger.info("서버로부터의 Streaming 응답: " + e.getWelcomeMessage())
+//        );
     }
 
     public void sendMessage(List<String> messages) {
