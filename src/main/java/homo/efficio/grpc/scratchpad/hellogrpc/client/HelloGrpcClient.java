@@ -47,6 +47,8 @@ public class HelloGrpcClient {
         try {
 //            unary
             response = blockingStub.unarySayHello(request);
+            // unary SayHello는 클라이언트에서는 여러번 호출 가능
+            response = blockingStub.unarySayHello(request);
 
 //            serverStreaming
 //            helloResponseIterator = blockingStub.serverStreamingSayHello(request);

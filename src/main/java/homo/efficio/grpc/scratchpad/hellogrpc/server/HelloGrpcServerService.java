@@ -24,7 +24,7 @@ public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
                 HelloResponse.newBuilder().setWelcomeMessage("Hello " + request.getName()).build();
         // unary이면 onNext()를 두 번 이상 호출할 수 없다.
         responseObserver.onNext(helloResponse);
-        responseObserver.onNext(helloResponse);
+//        responseObserver.onNext(helloResponse);
         // 두 번 호출 시 클라이언트의 blockingStub.unarySayHello() 호출부에서 아래와 같은 예외 발생
 //        Status{code=CANCELLED, description=Failed to read message., cause=io.grpc.StatusRuntimeException: INTERNAL: More than one value received for unary call
 //            at io.grpc.Status.asRuntimeException(Status.java:531)
