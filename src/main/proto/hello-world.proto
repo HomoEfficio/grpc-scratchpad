@@ -13,6 +13,8 @@ service HelloGrpc {
     rpc serverStreamingSayHello(HelloRequest) returns (stream HelloResponse) {}
 
     rpc clientStreamingSayHello(stream HelloRequest) returns (HelloResponse) {}
+
+    rpc biStreamingSayHello(stream HelloRequest) returns (stream HelloResponse) {}
 }
 
 message HelloRequest {
