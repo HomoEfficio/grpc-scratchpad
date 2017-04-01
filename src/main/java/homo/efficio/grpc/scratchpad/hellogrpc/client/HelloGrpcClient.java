@@ -4,7 +4,6 @@ import homo.efficio.grpc.scratchpad.hellogrpc.HelloGrpcGrpc;
 import homo.efficio.grpc.scratchpad.hellogrpc.HelloRequest;
 import homo.efficio.grpc.scratchpad.hellogrpc.HelloResponse;
 import io.grpc.StatusRuntimeException;
-import io.grpc.stub.AbstractStub;
 import io.grpc.stub.StreamObserver;
 
 import java.util.Iterator;
@@ -35,7 +34,7 @@ public class HelloGrpcClient {
     }
 
 
-    public void sendUnaryMessage(String msg) {
+    public void sendBlockingUnaryMessage(String msg) {
 
         HelloRequest request = HelloRequest.newBuilder().setName(msg).build();
         HelloResponse response;
@@ -44,7 +43,7 @@ public class HelloGrpcClient {
             logger.info("Unary 서비스 호출, 메시지: [" + msg + "]");
             response = blockingStub.unarySayHello(request);
             // unary SayHello는 클라이언트에서는 여러번 호출 가능
-            response = blockingStub.unarySayHello(request);
+//            response = blockingStub.unarySayHello(request);
         } catch (StatusRuntimeException e) {
             logger.log(Level.SEVERE, "Unary 서비스 호출 중 실패: " + e.getStatus());
             return;
@@ -137,5 +136,33 @@ public class HelloGrpcClient {
         }
 
         requestObserver.onCompleted();
+    }
+
+    public void sendAsyncUnaryMessage(String msg) {
+
+        HelloRequest request = HelloRequest.newBuilder().setName(msg).build();
+
+        logger.info("Async Unary 서비스 호출, 메시지: [" + msg + "]");
+        asyncStub.unarySayHello(
+                request,
+                // 서버에 보낼 콜백 객체
+                new StreamObserver<HelloResponse>() {
+                    @Override
+                    public void onNext(HelloResponse value) {
+                        logger.info("Async Unary 서버로부터의 응답\n" + value.getWelcomeMessage());
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        logger.log(Level.SEVERE, "Async Unary responseObserver.onError() 호출됨");
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        logger.info("Async Unary 서버 응답 completed");
+                    }
+                }
+        );
+        logger.info("(Nonblocking이면서)Async이니까 서버 응답 기다리지 않고, 결과 신경쓰지 않고 다른 작업 할 수 있다.");
     }
 }

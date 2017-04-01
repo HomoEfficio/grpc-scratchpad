@@ -22,6 +22,14 @@ public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
         logger.info("Unary 메시지 왔다: " + request.getName());
         HelloResponse helloResponse =
                 HelloResponse.newBuilder().setWelcomeMessage("Unary Hello " + request.getName()).build();
+
+        // 클라이언트에게 회신 주는데 2초 걸린다고 치자
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         // unary이면 onNext()를 두 번 이상 호출할 수 없다.
         responseObserver.onNext(helloResponse);
 //        responseObserver.onNext(helloResponse);
@@ -35,8 +43,16 @@ public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
 //            at io.grpc.stub.ClientCalls$ThreadlessExecutor.waitAndDrain(ClientCalls.java:587)
 //            at io.grpc.stub.ClientCalls.blockingUnaryCall(ClientCalls.java:135)
 //            at homo.efficio.grpc.scratchpad.hellogrpc.HelloGrpcGrpc$HelloGrpcBlockingStub.unarySayHello(HelloGrpcGrpc.java:197)
-//            at homo.efficio.grpc.scratchpad.hellogrpc.client.HelloGrpcClient.sendUnaryMessage(HelloGrpcClient.java:49)
+//            at homo.efficio.grpc.scratchpad.hellogrpc.client.HelloGrpcClient.sendBlockingUnaryMessage(HelloGrpcClient.java:49)
 //            at homo.efficio.grpc.scratchpad.hellogrpc.client.HelloGrpcClientRunner.main(HelloGrpcClientRunner.java:31)
+
+        // 회신 주고 나서 응답을 마치는데 또 1초 걸린다고 치자.
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         responseObserver.onCompleted();
     }
 
