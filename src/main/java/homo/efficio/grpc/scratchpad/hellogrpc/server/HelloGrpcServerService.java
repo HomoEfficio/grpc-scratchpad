@@ -32,8 +32,8 @@ public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
 
         // unary이면 onNext()를 두 번 이상 호출할 수 없다.
         responseObserver.onNext(helloResponse);
-//        responseObserver.onNext(helloResponse);
-        // 두 번 호출 시 클라이언트의 blockingStub.unarySayHello() 호출부에서 아래와 같은 예외 발생
+        responseObserver.onNext(helloResponse);
+        // Blocking: onNext() 두 번 호출 시 클라이언트의 blockingStub.unarySayHello() 호출부에서 아래와 같은 예외 발생
 //        Status{code=CANCELLED, description=Failed to read message., cause=io.grpc.StatusRuntimeException: INTERNAL: More than one value received for unary call
 //            at io.grpc.Status.asRuntimeException(Status.java:531)
 //            at io.grpc.stub.ClientCalls$UnaryStreamToFuture.onMessage(ClientCalls.java:423)
@@ -45,6 +45,8 @@ public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
 //            at homo.efficio.grpc.scratchpad.hellogrpc.HelloGrpcGrpc$HelloGrpcBlockingStub.unarySayHello(HelloGrpcGrpc.java:197)
 //            at homo.efficio.grpc.scratchpad.hellogrpc.client.HelloGrpcClient.sendBlockingUnaryMessage(HelloGrpcClient.java:49)
 //            at homo.efficio.grpc.scratchpad.hellogrpc.client.HelloGrpcClientRunner.main(HelloGrpcClientRunner.java:31)
+
+        // Async: onNext() 두 번 호출 시 클라이언트가 넘겨준 콜백(responseObserver)의 onError() 호출됨
 
         // 회신 주고 나서 응답을 마치는데 또 1초 걸린다고 치자.
         try {
