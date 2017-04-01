@@ -74,7 +74,7 @@ public class HelloGrpcClient {
 
             @Override
             public void onError(Throwable t) {
-                logger.log(Level.SEVERE, "Clent Streaming gRPC 에러");
+                logger.log(Level.SEVERE, "Clent Streaming gRPC responseObserver.onError() 호출됨");
             }
 
             @Override
