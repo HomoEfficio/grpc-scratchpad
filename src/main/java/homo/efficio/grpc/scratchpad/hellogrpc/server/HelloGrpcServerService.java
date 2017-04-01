@@ -35,7 +35,7 @@ public class HelloGrpcServerService extends HelloGrpcGrpc.HelloGrpcImplBase {
 //            at io.grpc.stub.ClientCalls$ThreadlessExecutor.waitAndDrain(ClientCalls.java:587)
 //            at io.grpc.stub.ClientCalls.blockingUnaryCall(ClientCalls.java:135)
 //            at homo.efficio.grpc.scratchpad.hellogrpc.HelloGrpcGrpc$HelloGrpcBlockingStub.unarySayHello(HelloGrpcGrpc.java:197)
-//            at homo.efficio.grpc.scratchpad.hellogrpc.client.HelloGrpcClient.sendMessage(HelloGrpcClient.java:49)
+//            at homo.efficio.grpc.scratchpad.hellogrpc.client.HelloGrpcClient.sendUnaryMessage(HelloGrpcClient.java:49)
 //            at homo.efficio.grpc.scratchpad.hellogrpc.client.HelloGrpcClientRunner.main(HelloGrpcClientRunner.java:31)
         responseObserver.onCompleted();
     }

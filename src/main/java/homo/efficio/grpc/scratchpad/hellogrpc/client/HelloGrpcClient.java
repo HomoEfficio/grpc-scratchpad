@@ -24,50 +24,56 @@ public class HelloGrpcClient {
 
     private final HelloGrpcGrpc.HelloGrpcStub asyncStub;
 
-    public HelloGrpcClient(HelloGrpcGrpc.HelloGrpcBlockingStub blockingStub) {
+    private final HelloGrpcGrpc.HelloGrpcFutureStub futureStub;
+
+    public HelloGrpcClient(HelloGrpcGrpc.HelloGrpcBlockingStub blockingStub,
+                           HelloGrpcGrpc.HelloGrpcStub asyncStub,
+                           HelloGrpcGrpc.HelloGrpcFutureStub futureStub) {
         this.blockingStub = blockingStub;
-        this.asyncStub = null;
-    }
-
-    public HelloGrpcClient(HelloGrpcGrpc.HelloGrpcStub asyncStub) {
-        this.blockingStub = null;
         this.asyncStub = asyncStub;
+        this.futureStub = futureStub;
     }
 
-    public void sendMessage(String msg) {
-        logger.info("Request 생성, 메시지: [" + msg + "]");
-//        unary, serverStreaming
-        HelloRequest request = HelloRequest.newBuilder().setName(msg).build();
 
-//        unary
+    public void sendUnaryMessage(String msg) {
+
+        HelloRequest request = HelloRequest.newBuilder().setName(msg).build();
         HelloResponse response;
 
-//        serverStreaming
-//        Iterator<HelloResponse> helloResponseIterator = null;
         try {
-//            unary
+            logger.info("Unary 서비스 호출, 메시지: [" + msg + "]");
             response = blockingStub.unarySayHello(request);
             // unary SayHello는 클라이언트에서는 여러번 호출 가능
             response = blockingStub.unarySayHello(request);
-
-//            serverStreaming
-//            helloResponseIterator = blockingStub.serverStreamingSayHello(request);
-
         } catch (StatusRuntimeException e) {
-            logger.warning("RPC 서버 호출 중 실패: " + e.getStatus());
+            logger.log(Level.SEVERE, "RPC 서버 호출 중 실패: " + e.getStatus());
             return;
         }
-//        unary
-        logger.info("서버로부터의 응답: " + response.getWelcomeMessage());
 
-//        server Streaming
-//        helloResponseIterator.forEachRemaining(
-//                (e) -> logger.info("서버로부터의 Streaming 응답: " + e.getWelcomeMessage())
-//        );
+        logger.info("서버로부터의 응답: " + response.getWelcomeMessage());
     }
 
-    public void sendMessage(List<String> messages) {
+    public void sendServerStreamingMessage(String msg) {
 
+        HelloRequest request = HelloRequest.newBuilder().setName(msg).build();
+        Iterator<HelloResponse> responseIterator = null;
+
+        try {
+            logger.info("ServerStreaming 서비스 호출, 메시지: [" + msg + "]");
+            responseIterator = blockingStub.serverStreamingSayHello(request);
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.SEVERE, "ServerStreaming 서버 호출 중 실패: " + e.getStatus());
+            return;
+        }
+
+        responseIterator.forEachRemaining(
+                (e) -> logger.info("서버로부터의 Streaming 응답: " + e.getWelcomeMessage())
+        );
+    }
+
+    public void sendClientStreamingMessage(List<String> messages) {
+
+        // 서버에 보낼 콜백 객체
         StreamObserver<HelloResponse> responseObserver = new StreamObserver<HelloResponse>() {
             @Override
             public void onNext(HelloResponse value) {

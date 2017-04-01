@@ -20,6 +20,7 @@ public class HelloGrpcClientInfra {
     private final ManagedChannel channel;
     private final HelloGrpcGrpc.HelloGrpcBlockingStub blockingStub;
     private final HelloGrpcGrpc.HelloGrpcStub asyncStub;
+    private final HelloGrpcGrpc.HelloGrpcFutureStub futureStub;
 
     public HelloGrpcClientInfra(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port)
@@ -30,7 +31,7 @@ public class HelloGrpcClientInfra {
         this.channel = channelBuilder.build();
         this.blockingStub = HelloGrpcGrpc.newBlockingStub(channel);
         this.asyncStub = HelloGrpcGrpc.newStub(channel);
-
+        this.futureStub = HelloGrpcGrpc.newFutureStub(channel);
     }
 
     public void shutdown() throws InterruptedException {
@@ -44,5 +45,9 @@ public class HelloGrpcClientInfra {
 
     public HelloGrpcGrpc.HelloGrpcStub getAsyncStub() {
         return asyncStub;
+    }
+
+    public HelloGrpcGrpc.HelloGrpcFutureStub getFutureStub() {
+        return futureStub;
     }
 }

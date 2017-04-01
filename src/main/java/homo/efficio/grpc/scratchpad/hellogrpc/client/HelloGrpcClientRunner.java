@@ -1,17 +1,8 @@
 package homo.efficio.grpc.scratchpad.hellogrpc.client;
 
 import homo.efficio.grpc.scratchpad.hellogrpc.HelloGrpcGrpc;
-import homo.efficio.grpc.scratchpad.hellogrpc.HelloRequest;
-import homo.efficio.grpc.scratchpad.hellogrpc.HelloResponse;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.StatusRuntimeException;
-import io.grpc.stub.AbstractStub;
 
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author homo.efficio@gmail.com
@@ -22,25 +13,23 @@ public class HelloGrpcClientRunner {
     public static void main(String[] args) throws InterruptedException {
         String host = "localhost";
         int serverPort = 54321;
-
         HelloGrpcClientInfra helloGrpcClientInfra = new HelloGrpcClientInfra(host, serverPort);
 
-//        unary, serverStreaming
-        HelloGrpcGrpc.HelloGrpcBlockingStub stub = helloGrpcClientInfra.getBlockingStub();
-        HelloGrpcClient helloGrpcClient = new HelloGrpcClient(stub);
-        helloGrpcClient.sendMessage("스프링캠프 2017");
+        HelloGrpcGrpc.HelloGrpcBlockingStub blockingStub = helloGrpcClientInfra.getBlockingStub();
+        HelloGrpcGrpc.HelloGrpcStub asyncStub = helloGrpcClientInfra.getAsyncStub();
+        HelloGrpcGrpc.HelloGrpcFutureStub futureStub = helloGrpcClientInfra.getFutureStub();
+        HelloGrpcClient helloGrpcClient = new HelloGrpcClient(blockingStub, asyncStub, futureStub);
 
-
-//        clientStreaming
-//        HelloGrpcGrpc.HelloGrpcStub asyncStub = helloGrpcClientInfra.getAsyncStub();
-//        HelloGrpcClient helloGrpcClient = new HelloGrpcClient(asyncStub);
-//
-//        String[] strings = {"스프링", "캠프", "2017"};
-//        helloGrpcClient.sendMessage(Arrays.asList(strings));
-
-//        unary, serverStreaming
+//        // Unary
+//        helloGrpcClient.sendUnaryMessage("Unary gPRC 스프링캠프 2017");
 //        helloGrpcClientInfra.shutdown();
 
+//        // ServerStreaming
+//        helloGrpcClient.sendServerStreamingMessage("ServerStreaming gRPC 스프링캠프 2017");
+//        helloGrpcClientInfra.shutdown();
+//
+        // clientStreaming
+        helloGrpcClient.sendClientStreamingMessage(Arrays.asList("ClientStreaming", "gRPC", "스프링캠프 2017"));
         // clientStreaming은 async 이므로 여유를 주고 shutdown 해야 된다
         Thread.sleep(2000);
         helloGrpcClientInfra.shutdown();
