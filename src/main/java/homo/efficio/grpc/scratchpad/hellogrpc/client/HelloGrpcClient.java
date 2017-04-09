@@ -70,7 +70,9 @@ public class HelloGrpcClient {
         );
     }
 
-    public void sendClientStreamingMessage(List<String> messages) {
+    // Blocking Stub은 clientStreaming을 지원하지 않음
+
+    public void sendAsyncClientStreamingMessage(List<String> messages) {
 
         // 서버에 보낼 콜백 객체
         StreamObserver<HelloResponse> responseObserver = new StreamObserver<HelloResponse>() {
